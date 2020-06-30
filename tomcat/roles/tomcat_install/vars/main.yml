@@ -1,0 +1,9 @@
+JDK_VER: 161
+TOMCAT_VER: 8.0.36
+
+TOMCAT_URL: tomcat
+TOMCAT_PORT: 8080
+SOURCE_DIR: /software
+JDK_DIR: /usr/local/jdk
+TOMCAT_DIR: /usr/local/tomcat
+DATA_DIR: /data/tomcat

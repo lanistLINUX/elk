@@ -1,0 +1,4 @@
+#引用prepare、copy、install模块
+- include: prepare.yml
+- include: jdk_install.yml
+- include: tomcat_install.yml
