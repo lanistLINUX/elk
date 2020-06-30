@@ -1,0 +1,3 @@
+kibana_package: kibana-5.2.0-linux-x86_64.tar.gz
+source_dir: /tmp
+kibana_dir: /data/kibana

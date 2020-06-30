@@ -1,0 +1,5 @@
+- name: 系统优化
+  shell: "if [ `grep max /etc/sysctl.conf |wc -l` -eq 0 ]; then echo -e 'fs.file-max=65535\nvm.max_map_count=262144' >>/etc/sysctl.conf&&sysctl -p; fi"
+
+- name: 系统优化2
+  shell: "if [ `grep ^* /etc/security/limits.conf |wc -l` -eq 0 ]; then echo -e '* soft nofile 65535\n* hard nofile 131072\n* soft nproc 2048\n* hard nproc 4096' >>/etc/security/limits.conf; fi"
