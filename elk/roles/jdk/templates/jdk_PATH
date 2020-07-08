@@ -1,0 +1,4 @@
+JAVA_HOME=/usr/local/jdk1.8.0_161
+JRE_HOME=/usr/local/jdk1.8.0_161/jre
+CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib:$JRE_HOME/lib
+PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin

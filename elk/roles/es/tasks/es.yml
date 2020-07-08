@@ -1,0 +1,111 @@
+- name: 创建elk的工作目录
+  file:
+   path: /data
+   state: directory
+
+- name: 拷贝es包到主机
+  copy: src={{ es_var }} dest={{ source_dir }}
+
+- name: 解压es包
+  command: chdir={{ source_dir }} /bin/tar xzf {{ es_var }}
+ 
+- name: 目录重命名
+  shell: "if [ ! -d {{ es_dir }} ]; then mv {{ source_dir }}/elasticsearch-7.1.1 {{ es_dir }}; fi"
+
+- name: 创建es数据存放目录
+  file:
+   path: /data/es/elk_data
+   state: directory
+
+- name: 创建es日志目录
+  file:
+   path: /data/es/elk_logs
+   state: directory
+
+- name: 配置监听网络地址
+  lineinfile:
+   destfile: /data/es/config/elasticsearch.yml
+   regexp: 'network.host:'
+   line: 'network.host: {{IP}}'
+                                
+- name: 开启监听端口
+  lineinfile:
+   destfile: /data/es/config/elasticsearch.yml
+   regexp: 'http.port:'
+   line: 'http.port: 9200'
+
+- name: 配置
+  lineinfile:
+   destfile: /data/es/config/elasticsearch.yml
+   regexp: 'bootstrap.memory_lock:'
+   line: 'bootstrap.memory_lock: false'
+                                         
+- name: 设置node name
+  lineinfile:
+   destfile: /data/es/config/elasticsearch.yml
+   regexp: 'node.name:'
+   line: 'node.name: {{ ansible_hostname }}'
+
+- name: 设置集群名称
+  lineinfile:
+   destfile: /data/es/config/elasticsearch.yml
+   regexp: 'cluster.name:'
+   line: 'cluster.name: my-cluster'
+
+- name: 设置数据存放目录
+  lineinfile:
+   destfile: /data/es/config/elasticsearch.yml
+   regexp: 'path.data:'
+   line: 'path.data: /data/es/elk_data'
+
+- name: 设置日志存放目录
+  lineinfile:
+   destfile: /data/es/config/elasticsearch.yml
+   regexp: 'path.logs:'
+   line: 'path.logs: /data/es/elk_logs'
+
+- name: 
+  lineinfile:配置集群ip
+   destfile: /data/es/config/elasticsearch.yml
+   regexp: 'discovery.seed_hosts:'
+   line: 'discovery.seed_hosts: ["192.168.253.202","192.168.253.53", "192.168.253.54"]'
+
+- name: 
+  lineinfile:
+   destfile: /data/es/config/elasticsearch.yml
+   regexp: 'cluster.initial_master_nodes:'
+   line: 'cluster.initial_master_nodes: ["elk01", "elk02","elk03"]'
+
+- name:
+  lineinfile:
+   destfile: /data/es/config/elasticsearch.yml
+   line: "http.cors.enabled: true"
+
+- name:
+  lineinfile:
+   destfile: /data/es/config/elasticsearch.yml
+   line: "http.cors.allow-origin: \"*\""
+
+- name:
+  lineinfile:
+   destfile: /data/es/config/elasticsearch.yml
+   regexp: 'bootstrap.memory_lock:'
+   line: 'bootstrap.memory_lock: false'
+
+- name: 拷贝启动脚本1
+  template: src=es dest=/usr/bin/ owner=root group=root mode=0755
+
+- name: 拷贝启动脚本2
+  template: src=es dest=/etc/init.d owner=root group=root mode=0755
+
+- name: 加入开机自启_1
+  shell: chkconfig --add es
+
+- name: 加入开机自启_2
+  shell: chkconfig es on
+
+- name: 启动es
+  shell: systemctl start es
+
+- name: 删除压缩包
+  shell: rm -f {{ source_dir }}/{{ es_var }}
