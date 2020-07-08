@@ -1,3 +1,0 @@
-logstash_package: logstash-5.2.0.tar.gz
-source_dir: /tmp
-logstash_dir: /data/logstash
