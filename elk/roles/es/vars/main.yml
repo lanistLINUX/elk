@@ -1,3 +1,0 @@
-es_var: elasticsearch-7.1.1-linux-x86_64.tar.gz
-source_dir: /tmp
-es_dir: /data/es
